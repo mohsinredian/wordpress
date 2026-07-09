@@ -1,0 +1,91 @@
+version: "3.9"
+
+services:
+
+  nginx:
+    build:
+      context: ./docker/nginx
+    container_name: wordpress-nginx
+
+    ports:
+      - "${NGINX_PORT}:80"
+
+    volumes:
+      - ./:/var/www/html
+
+    depends_on:
+      - php
+
+    networks:
+      - wordpress
+
+
+  php:
+    build:
+      context: ./docker/php
+    container_name: wordpress-php
+
+    volumes:
+      - ./:/var/www/html
+
+    depends_on:
+      - mysql
+
+    networks:
+      - wordpress
+
+
+  mysql:
+    image: mysql:8.4
+
+    container_name: wordpress-mysql
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/wordpress.sql:/docker-entrypoint-initdb.d/wordpress.sql
+
+    networks:
+      - wordpress
+
+
+  phpmyadmin:
+
+    image: phpmyadmin/phpmyadmin
+
+    container_name: wordpress-phpmyadmin
+
+    restart: unless-stopped
+
+    ports:
+      - "8081:80"
+
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+
+    depends_on:
+      - mysql
+
+    networks:
+      - wordpress
+
+
+volumes:
+
+  mysql_data:
+
+
+networks:
+
+  wordpress:
