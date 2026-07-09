@@ -29,7 +29,7 @@ jobs:
       - name: Build and Push PHP Image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./docker/php
           file: ./docker/php/Dockerfile
           push: true
           tags: |
@@ -42,7 +42,7 @@ jobs:
       - name: Build and Push Nginx Image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./docker/nginx
           file: ./docker/nginx/Dockerfile
           push: true
           tags: |
