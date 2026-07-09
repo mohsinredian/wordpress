@@ -3,8 +3,9 @@ version: "3.9"
 services:
 
   nginx:
-    build:
-      context: ./docker/nginx
+    image: mohsinredian/wordpress-nginx:latest
+   # build:
+    #  context: ./docker/nginx
     container_name: wordpress-nginx
 
     ports:
@@ -21,8 +22,9 @@ services:
 
 
   php:
-    build:
-      context: ./docker/php
+    image: mohsinredian/wordpress-php:latest
+   # build:
+    #  context: ./docker/php
     container_name: wordpress-php
 
     volumes:
@@ -36,7 +38,7 @@ services:
 
 
   mysql:
-    image: mysql:8.2
+    image: mysql:8.4
 
     container_name: wordpress-mysql
 
